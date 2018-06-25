@@ -1,0 +1,118 @@
+﻿{
+  "output_file": "settings.json",
+    "OnlyLive": {
+    "type": "checkbox",
+    "value": false,
+  	"label": "Only when live",
+    "tooltip": "Command is only active when stream is live",
+  	"group": "General"
+  },
+    "Command": {
+    "type": "textbox",
+    "value": "!boop",
+  	"label": "Command Name",
+    "tooltip": "The command the bot will respond to",
+  	"group": "General"
+  },
+    "Permission": {
+    "type": "dropdown",
+    "value": "Everyone",
+    "items": ["Everyone","Regular","Subscriber","GameWisp Subscriber","User_Specific","Min_Rank","Min_Points","Min_Hours","Moderator","Editor","Caster"],
+    "label": "Permission level",
+    "tooltip": "Set the permission level for the command",
+    "group": "General"
+  },
+    "PermissionInfo": {
+    "type": "textbox",
+    "value": "",
+    "label": "Permission level info",
+    "tooltip": "Set the user, rank or tier for permission",
+    "group": "General"
+  },
+    "Cost": {
+    "type": "numberbox",
+    "value": 5,
+    "label": "Cost",
+    "tooltip": "Base cost on using the command",
+    "group": "General"
+  },
+    "Payout": {
+    "type": "numberbox",
+    "value": 5,
+    "label": "Payout",
+    "tooltip": "Points to win",
+    "group": "General"
+  },
+    "CoolDown": {
+    "type": "numberbox",
+  	"label": "Timer and Cooldown (seconds)",
+    "value": 60,
+    "tooltip": "Timer and global Cooldown in seconds.",
+  	"group": "General"
+  },
+    "UseCD": {
+    "type": "checkbox",
+    "value": true,
+  	"label": "Use Cooldown Messages",
+    "tooltip": "Enable/Disable cooldown/timer messages",
+  	"group": "General"
+  },
+   "OnCooldown": {
+    "type": "textbox",
+    "value": "{0} the command is still on cooldown for {1} seconds!",
+  	"label": "Cooldown / Timer Response (whisper only)",
+    "tooltip": "The message that the bot will display when the command is on cooldown. \r\n {0} = user \r\n {1} = time remaining",
+  	"group": "General"
+  },
+    "UserCooldown": {
+    "type": "numberbox",
+  	"label": "User Cooldown (seconds)",
+    "value": 10,
+    "tooltip": "Do not use",
+  	"group": "Useless"
+  },
+    "OnUserCooldown": {
+    "type": "textbox",
+    "value": "{0} the command is still on user cooldown for {1} seconds!",
+  	"label": "User Cooldown Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = time remaining",
+   	"group": "Useless"
+  },
+    "NewBoop": {
+    "type": "textbox",
+    "value": "{0}, someone has booped you in secret. Type {1} followed by a username to guess who booped you and win {2} {4}. You have {3} seconds, and only one guess!",
+    "label": "Start Guessing message",
+    "tooltip": " {0} = guesser \r\n {1} = command \r\n {2} = payout \r\n {3} = timer \r\n {4} = currency name",
+    "group": "Responses"
+  },
+    "CorrectGuess": {
+    "type": "textbox",
+    "value": "{0}, that is correct! {1} was the one who booped you. You won {2} {3}",
+    "label": "Correct Guess message",
+    "tooltip": " {0} = guesser \r\n {1} = booper \r\n {2} = payout \r\n {3} = currency name",
+    "group": "Responses"
+  },
+    "WrongGuess": {
+    "type": "textbox",
+    "value": "{0}, that was a wrong guess. The person who booped you has received {2} {3}, in addition to the {4} they paid to boop you!",
+    "label": "Wrong Guess message",
+    "tooltip": " {0} = guesser \r\n {1} = booper \r\n {2} = payout \r\n {3} = currency name \r\n {4} = cost",
+    "group": "Responses"
+  },
+    "NoGuess": {
+    "type": "textbox",
+    "value": "{0}, unfortunately, {1} seconds have passed, and you have not guessed! Too bad the one who booped you lost their points as well!",
+    "label": "No Guess message",
+    "tooltip": " {0} = guesser \r\n {1} = timer",
+    "group": "Responses"
+  },
+
+    "NotEnoughResponse": {
+    "type": "textbox",
+    "value": "{0} you don't have enough {1}! {2} costs {3} {1} ",
+    "label": "Not enough currency response",
+    "tooltip": "Message sent when user doesn't have enough points! \r\n {0} = user \r\n {1} = Currency name \r\n {2} = command name \r\n {3} = command cost",
+    "group": "Responses"
+  },
+
+}

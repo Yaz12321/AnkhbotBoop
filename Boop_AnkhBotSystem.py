@@ -163,7 +163,7 @@ def Execute(data):
                                 tim = time.time() 
                                 # add cooldowns
                                 Parent.AddUserCooldown(ScriptName,MySettings.Command,data.User,MySettings.UserCooldown)
-                                Parent.AddCooldown(ScriptName,MySettings.Command,MySettings.Cooldown)
+                                Parent.AddCooldown(ScriptName,MySettings.Command,MySettings.CoolDown)
 
                             else:
                                 Parent.SendStreamWhisper(data.User,"User not active")

@@ -12,7 +12,7 @@ import time
 ScriptName = "Boop"
 Website = ""
 Creator = "Yaz12321"
-Version = "1.0"
+Version = "1.0.1"
 Description = "Viewer can boop another viewers through whispering the bot, the booped viewere has to guess who is the booper."
 
 settingsFile = os.path.join(os.path.dirname(__file__), "settings.json")
@@ -23,8 +23,9 @@ settingsFile = os.path.join(os.path.dirname(__file__), "settings.json")
 
 # Version:
 
-
-# > 1.0.0.0 < 
+# > 1.0.1 <
+    #Fixed bugs
+# > 1.0 < 
     # Official Release
 
 class Settings:
@@ -76,6 +77,8 @@ def Init():
     
     # Load in saved settings
     MySettings = Settings(settingsFile)
+    global tim
+    tim = 0
 
     # End of Init
     return
@@ -103,7 +106,7 @@ def Execute(data):
 
 
     
-    if data.IsWhisper() and data.GetParam(0).lower() == MySettings.Command:
+    if data.IsWhisper() and data.GetParam(0).lower() == MySettings.Command and time.time()>tim + MySettings.CoolDown:
        
         #check if command is in "live only mode"
         if MySettings.OnlyLive:
@@ -145,47 +148,55 @@ def Execute(data):
             
             else: #check if user got enough points
                 if MySettings.Cost < Parent.GetPoints(data.User):
-                    if data.GetParam(1) == data.User:
-                        Parent.SendStreamWhisper(data.User, "Really? Nice try!")
-                    else:
-                        if data.GetParam(1).lower() in Parent.GetActiveUsers():
-                            trigger = 0
-                            booper = data.User.lower()
-                            booped = data.GetParam(1).lower()
-                            Parent.RemovePoints(data.User, MySettings.Cost)
-                            Parent.SendTwitchMessage(MySettings.NewBoop.format(booped, MySettings.Command, MySettings.Payout, MySettings.CoolDown,Parent.GetCurrencyName()))
-                            tim = time.time() 
-                            # add cooldowns
-                            Parent.AddUserCooldown(ScriptName,MySettings.Command,data.User,MySettings.UserCooldown)
-                            Parent.AddCooldown(ScriptName,MySettings.Command,MySettings.Cooldown)
-
+                    if data.User in Parent.GetActiveUsers():
+                    
+                        if data.GetParam(1).lower() == data.User:
+                            Parent.SendStreamWhisper(data.User, "Really? Nice try!")
                         else:
-                            Parent.SendStreamWhisper(data.User,"User not active")             
+                            if data.GetParam(1).lower() in Parent.GetActiveUsers():
+                                trigger = 0
+                                booper = data.User.lower()
+                                booped = data.GetParam(1).lower()
+                                Parent.RemovePoints(data.User, MySettings.Cost)
+                                Parent.SendTwitchMessage(MySettings.NewBoop.format(booped, MySettings.Command, MySettings.Payout, MySettings.CoolDown,Parent.GetCurrencyName()))
+                                global tim
+                                tim = time.time() 
+                                # add cooldowns
+                                Parent.AddUserCooldown(ScriptName,MySettings.Command,data.User,MySettings.UserCooldown)
+                                Parent.AddCooldown(ScriptName,MySettings.Command,MySettings.Cooldown)
+
+                            else:
+                                Parent.SendStreamWhisper(data.User,"User not active")
+                    else:
+                        Parent.SendStreamWhisper(data.User,"You need to be active in chat to boop")
 
                 
                 else:
                     #send not enough currency response
                     Parent.SendStreamWhisper(data.User, MySettings.NotEnoughResponse.format(data.User,Parent.GetCurrencyName(),MySettings.Command,MySettings.Cost))
 
-    if time.time() - tim < MySettings.CoolDown and trigger == 0:
-        if data.IsChatMessage() and data.GetParam(0).lower() == MySettings.Command and data.User.lower() == booped and str(data.IsWhisper()) == "False":
+    try:
+        if time.time() - tim < MySettings.CoolDown and trigger == 0:
+            if data.IsChatMessage() and data.GetParam(0).lower() == MySettings.Command and data.User.lower() == booped and str(data.IsWhisper()) == "False":
 
-            if data.GetParam(1).lower() == booper:
+                if data.GetParam(1).lower() == booper:
+                    
+                    Parent.AddPoints(data.User,data.UserName,MySettings.Payout)
+                    Parent.SendTwitchMessage(MySettings.CorrectGuess.format(data.User, booper, MySettings.Payout, Parent.GetCurrencyName()))
+                else:
+                    pay = MySettings.Cost + MySettings.Payout
+                    Parent.AddPoints(booper,booper,pay)
+                    Parent.SendTwitchMessage(MySettings.WrongGuess.format(data.User, booper, MySettings.Payout, Parent.GetCurrencyName(), MySettings.Cost))
+                booper = ""
+                booped = ""
+                trigger = 1
                 
-                Parent.AddPoints(data.User,data.UserName,MySettings.Payout)
-                Parent.SendTwitchMessage(MySettings.CorrectGuess.format(data.User, booper, MySettings.Payout, Parent.GetCurrencyName()))
-            else:
-                pay = MySettings.Cost + MySettings.Payout
-                Parent.AddPoints(booper,booper,pay)
-                Parent.SendTwitchMessage(MySettings.WrongGuess.format(data.User, booper, MySettings.Payout, Parent.GetCurrencyName(), MySettings.Cost))
-            booper = ""
-            booped = ""
-            trigger = 1
-            
-    if time.time() - tim > MySettings.CoolDown and trigger == 0:
+        if time.time() - tim > MySettings.CoolDown and trigger == 0:
 
-        Parent.SendTwitchMessage(MySettings.NoGuess.format(booped,MySettings.CoolDown))
-        trigger = 1
+            Parent.SendTwitchMessage(MySettings.NoGuess.format(booped,MySettings.CoolDown))
+            trigger = 1
+    except:
+        pass
         
     return
 

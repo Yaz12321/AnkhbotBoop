@@ -4,3 +4,6 @@ A viewer would whisper the bot (should follow the bot account fist!) ![command] 
 
 
 NOTE: Cooldown messages do not work correctly. Has been used on a live stream for a while, the game works fine, and cooldown works ok (needs some changes). Further updates will be made later (mostly concerning difficulties).
+
+
+Check out more of my scripts: https://github.com/Yaz12321?tab=repositories
